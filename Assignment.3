@@ -1,0 +1,58 @@
+// MetaFactoryExample.java
+class MetaFactory {
+    // Generic factory method to create instances using Class<T>
+    public static <T> T createInstance(Class<T> clazz) {
+        try {
+            // Create a new instance using the default constructor
+            return clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot create instance of " + clazz.getName(), e);
+        }
+    }
+
+    // Overloaded factory method for classes with arguments
+    public static <T> T createInstance(Class<T> clazz, Class<?>[] paramTypes, Object[] args) {
+        try {
+            // Create a new instance using a parameterized constructor
+            return clazz.getDeclaredConstructor(paramTypes).newInstance(args);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot create instance of " + clazz.getName(), e);
+        }
+    }
+}
+
+// A sample class to demonstrate instance creation
+class Student {
+    String name;
+    int age;
+
+    // Default constructor
+    public Student() {
+        this.name = "Default Student";
+        this.age = 18;
+    }
+
+    // Parameterized constructor
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class MetaFactoryExample {
+    public static void main(String[] args) {
+        // Creating instance using default constructor
+        Student s1 = MetaFactory.createInstance(Student.class);
+        s1.display();
+
+        // Creating instance using parameterized constructor
+        Student s2 = MetaFactory.createInstance(Student.class,
+                        new Class<?>[]{String.class, int.class},
+                        new Object[]{"Rushisri", 20});
+        s2.display();
+    }
+}
